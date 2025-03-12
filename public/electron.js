@@ -48,7 +48,7 @@ ipcMain.handle("process-pdf", async (event, inputPath, outputPath) => {
     const pdfDoc = await pdfLib.PDFDocument.load(pdfBytes);
     const totalPages = pdfDoc.getPageCount();
 
-    let nomeCompletoAnterior = ""; // Para armazenar o último nome encontrado
+    let nomesExtraidos = new Set(); // Para armazenar nomes únicos e evitar duplicação
 
     // 🔹 Processa cada página separadamente
     for (let i = 0; i < totalPages; i++) {
@@ -59,26 +59,26 @@ ipcMain.handle("process-pdf", async (event, inputPath, outputPath) => {
       const singlePageBytes = await singlePageDoc.save();
       const pageText = await pdfParse(singlePageBytes);
 
-     
-
       // 🔹 Expressão regular para capturar o nome do beneficiário
-      let regexNome = /CPF\s*Nome Completo\s*\n?\d{3}\.\d{3}\.\d{3}-\d{2}\s*([\w\sÁÉÍÓÚÃÕÂÊÎÔÛÇáéíóúãõâêîôûç-]+)/;
+      let regexNome =
+        /CPF\s*Nome Completo\s*\n?\d{3}\.\d{3}\.\d{3}-\d{2}\s*([\w\sÁÉÍÓÚÃÕÂÊÎÔÛÇáéíóúãõâêîôûç-]+)/;
 
       let match = regexNome.exec(pageText.text);
+      let nomeCompleto = match ? match[1].trim() : `Beneficiario_Desconhecido`;
 
-      let nomeCompleto;
-      if (match) {
-        nomeCompleto = match[1].trim();
-        nomeCompleto = nomeCompleto.replace(/\s+/g, "_").replace(/[<>:"/\\|?*]/g, "");
-        nomeCompletoAnterior = nomeCompleto; // Atualiza o nome quando encontrado
-      } else {
-        nomeCompleto = nomeCompletoAnterior || `Beneficiario_Desconhecido`; // Mantém o último nome válido
+      // 🔹 Remove textos extras e caracteres inválidos do nome
+      nomeCompleto = nomeCompleto
+        .replace(/\s+/g, "_")
+        .replace(/[<>:"/\\|?*]/g, "");
+
+      // 🔹 Verifica se o nome já foi salvo para evitar duplicação
+      if (nomesExtraidos.has(nomeCompleto)) {
+        nomeCompleto += `_${i + 1}`;
       }
-
-  
+      nomesExtraidos.add(nomeCompleto);
 
       // 🔹 Salva cada página separadamente com o nome correto
-      const fileName = `${nomeCompleto}_Pagina_${i + 1}.pdf`;
+      const fileName = `${nomeCompleto}.pdf`;
       fs.writeFileSync(path.join(outputPath, fileName), singlePageBytes);
     }
 
@@ -88,8 +88,3 @@ ipcMain.handle("process-pdf", async (event, inputPath, outputPath) => {
     return "❌ Erro ao processar PDF.";
   }
 });
-
-
-
-
-

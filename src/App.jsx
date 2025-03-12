@@ -8,6 +8,7 @@ function App() {
   useEffect(() => {
     if (!window.electron) {
       console.error("⚠️ Electron não está disponível no contexto do frontend.");
+      setStatus("⚠️ Electron não está disponível.");
     } else {
       console.log("✅ Electron carregado corretamente!");
     }
@@ -32,10 +33,7 @@ function App() {
   };
 
   const handleProcessPDF = async () => {
-    console.log("📄 Processando PDF...");
-
     if (!window.electron) {
-      console.error("⚠️ Electron não está disponível.");
       setStatus("⚠️ Electron não está disponível.");
       return;
     }
@@ -55,64 +53,70 @@ function App() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-gray-900 text-white p-6">
-      <div className="bg-gray-800 shadow-xl rounded-2xl p-10 w-full max-w-md text-center">
-        {/* Título */}
-        <h1 className="text-3xl font-extrabold mb-6 flex items-center justify-center">
-          🔹 Separador de PDF de Imposto de renda
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white px-6">
+      <div className="container bg-gray-800 shadow-xl rounded-2xl p-8 w-full max-w-lg">
+        <h1 className="text-3xl font-extrabold mb-4 flex items-center justify-center">
+          Separador de PDF de Imposto de Renda
         </h1>
 
-        {/* Entrada do PDF */}
+        <p className="text-gray-300 text-sm text-center mb-6">
+          Selecione um <strong>PDF de Imposto de Renda</strong> e uma pasta de
+          destino para salvar os arquivos separados.
+        </p>
+
         <div className="w-full mb-5">
-          <label className="block text-lg font-semibold mb-2 text-left">📂 PDF de Entrada:</label>
-          <div className="flex items-center gap-3">
+          <label className="block text-lg font-semibold mb-2 text-left text-gray-200 flex items-center">
+            📂 PDF de Entrada:
+          </label>
+          <div className="input-container">
             <input
               type="text"
               placeholder="Selecione um arquivo..."
               value={inputPath}
               readOnly
-              className="flex-grow p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+              className="flex-grow p-3 bg-gray-700 text-white border-none text-center"
             />
             <button
               onClick={handleSelectFile}
-              className="p-3 bg-blue-500 hover:bg-blue-600 rounded-lg transition-all duration-200"
+              className="p-3 bg-blue-600 hover:bg-blue-700 transition-all duration-200"
             >
               📁
             </button>
           </div>
         </div>
 
-        {/* Pasta de Destino */}
         <div className="w-full mb-5">
-          <label className="block text-lg font-semibold mb-2 text-left">📁 Pasta de Destino:</label>
-          <div className="flex items-center gap-3">
+          <label className="block text-lg font-semibold mb-2 text-left text-gray-200 flex items-center">
+            📁 Pasta de Destino:
+          </label>
+          <div className="input-container">
             <input
               type="text"
               placeholder="Selecione uma pasta..."
               value={outputPath}
               readOnly
-              className="flex-grow p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+              className="flex-grow p-3 bg-gray-700 text-white border-none text-center"
             />
             <button
               onClick={handleSelectFolder}
-              className="p-3 bg-blue-500 hover:bg-blue-600 rounded-lg transition-all duration-200"
+              className="p-3 bg-blue-600 hover:bg-blue-700 transition-all duration-200"
             >
               📂
             </button>
           </div>
         </div>
 
-        {/* Botão de Processar */}
         <button
           onClick={handleProcessPDF}
-          className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg font-semibold text-lg shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+          className="processar-pdf-btn w-full text-white p-3 rounded-lg font-semibold text-lg shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
         >
-          🚀 Processar PDF
+          <span>🚀</span> Processar PDF
         </button>
 
-        {/* Status */}
         {status && (
-          <div className="mt-4 text-center text-yellow-400 font-medium text-sm">{status}</div>
+          <div className="mt-4 text-center text-yellow-400 font-medium text-sm">
+            {status}s
+          </div>
         )}
       </div>
     </div>
