@@ -38,6 +38,7 @@ Clone o repositório para a sua máquina local:
 ```bash
 git clone https://github.com/seu-usuario/separador-pdf-imposto-de-renda.git
 ```
+
 ### 2. Navegue até o diretório do projeto
 
 ```bash
@@ -45,17 +46,21 @@ cd separador-pdf-imposto-de-renda
 ```
 
 ### 3. Instale as dependências
+
 Para instalar as dependências do projeto, execute o seguinte comando:
 
 ```bash
 npm install
 ```
+
 ### 4. Instale as dependências do Python (se necessário)
+
 Se o projeto utiliza Python para manipulação adicional de PDFs ou automações, instale as dependências com o seguinte comando:
 
 ```bash
 pip install -r requirements.txt
 ```
+
 Nota: O arquivo requirements.txt pode ser necessário caso o projeto utilize bibliotecas Python específicas para processamento de PDF. Caso contrário, ignore esta etapa.
 
 ### 5. Inicialize o Electron com o Vite
@@ -63,16 +68,26 @@ Nota: O arquivo requirements.txt pode ser necessário caso o projeto utilize bib
 ```bash
 npm run dev
 ```
+
 Isso abrirá o aplicativo no ambiente de desenvolvimento local. O Electron irá rodar na porta 5173 e será acessado via http://localhost:5173.
 
-### 6.Gerar o build para produção
+### 6. Inicialize sever
+
+```bash
+python server.py
+```
+
+Isso abrirá o aplicativo no ambiente de desenvolvimento local. O server irá rodar na porta 5173 e será acessado via http://127.0.0.1:5000.
+
+### 7.Gerar o build para produção
 
 ```bash
 npm run build
 ```
+
 Isso abrirá o aplicativo no ambiente de desenvolvimento local. O Electron irá rodar na porta 5173 e será acessado via http://localhost:5173.
 
-### 7.Como Usar
+### 8.Como Usar
 
 Abra o aplicativo: Ao abrir o aplicativo, você verá a interface de usuário com dois campos:
 
