@@ -71,6 +71,16 @@ ipcMain.handle("process-pdf", async (event, inputPath, outputPath) => {
         .replace(/\s+/g, "_")
         .replace(/[<>:"/\\|?*]/g, "");
 
+      // 🔹 Remover a parte indesejada do nome
+      nomeCompleto = nomeCompleto.replace(
+        /_Natureza_do_Rendimento_Rendimentos_do_trabalho_assalariado_\d+$/,
+        ""
+      );
+      nomeCompleto = nomeCompleto.replace(
+        /_Natureza_do_Rendimento_Rendimentos_do_trabalho_sem_vínculo_empregatício_\d+$/,
+        ""
+      );
+
       // 🔹 Verifica se o nome já foi salvo para evitar duplicação
       if (nomesExtraidos.has(nomeCompleto)) {
         nomeCompleto += `_${i + 1}`;
